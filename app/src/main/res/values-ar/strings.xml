@@ -1,0 +1,17 @@
+<resources>
+  <string name="app_name">Stock Hawk</string>
+
+  <string name="action_example">العمل سبيل المثال</string>
+
+  <string name="action_settings">إعدادات</string>
+  <string name="action_change_units">وحدات التغيير</string>
+  <string name="symbol_search">رمز البحث</string>
+  <string name="content_test">بحث عن الأوراق المالية رمز</string>
+  <string name="input_hint">FB</string>
+  <string name="input_prefill"></string>
+  <string name="network_toast">اه اوه! هذا التطبيق يتطلب اتصال بالإنترنت</string>
+
+  <string name = "wrong_name">     عفوا !! اسم الاكتتاب أدخلته غير صحيح</string>
+
+  <string name="no_text"> يرجى إدخال اسم الاكتتاب </string>
+</resources>
