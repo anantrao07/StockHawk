@@ -7,6 +7,7 @@ import android.util.Log;
 import com.google.android.gms.gcm.GcmNetworkManager;
 import com.google.android.gms.gcm.GcmTaskService;
 import com.google.android.gms.gcm.TaskParams;
+import com.sam_chordas.android.stockhawk.data.HistoryModel;
 import com.sam_chordas.android.stockhawk.rest.Utils;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -17,6 +18,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -30,7 +32,8 @@ public class HistoryTaskService extends GcmTaskService {
     private CharSequence mstartDate;
     private CharSequence mendDate;
     Utils utility = new Utils();
-    private Context mContext;
+    ArrayList<HistoryModel> dataPoints = new ArrayList<HistoryModel>();
+
 
 
 
@@ -93,7 +96,7 @@ public class HistoryTaskService extends GcmTaskService {
                 e.printStackTrace();
             }
 
-            result = GcmNetworkManager.RESULT_FAILURE;
+            result = GcmNetworkManager.RESULT_SUCCESS;
 
             if (historyUrl != null) {
 
@@ -101,7 +104,7 @@ public class HistoryTaskService extends GcmTaskService {
 
                 urlString = historyUrl.toString();
 
-                //String url = "https://query.yahooapis.com/v1/public/yql?q=select%20%20*%20from%20yahoo.finance.historicaldata%20where%20symbol%20in%20(%20'TSLA'%20)%20and%20startDate%20%3D%20'2016-01-04'%20and%20endDate%20%3D%20'2016%20-%2004-10'&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=callback";
+
                 Log.e(LOG_CAT, urlString);
 
 
@@ -110,12 +113,12 @@ public class HistoryTaskService extends GcmTaskService {
                     InputStreamReader in = new InputStreamReader(fetchData((urlString)));
                     String inString = new Scanner(in).next();
                     Log.e(LOG_CAT, inString);
-                    utility.readHistory(fetchData((urlString)));
+                    dataPoints = utility.readHistory(fetchData((urlString)));
 
                         Intent dataIntent = new Intent("android.intent.action.MAIN");//"android.intent.action.MAIN");
 
                         if(dataIntent!=null)
-                            dataIntent.putParcelableArrayListExtra("historydata" , utility.hm);
+                            dataIntent.putParcelableArrayListExtra("historydata" , dataPoints);
                     mHistoryContext.sendBroadcast(dataIntent);
 
                     } catch (IOException e) {
@@ -125,7 +128,7 @@ public class HistoryTaskService extends GcmTaskService {
 
             }
 
-            result = GcmNetworkManager.RESULT_SUCCESS;
+           // result = GcmNetworkManager.RESULT_SUCCESS;
         }
 
 

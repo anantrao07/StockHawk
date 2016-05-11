@@ -155,7 +155,7 @@ public class Utils {
     return startDate;
   }
 
-  public List readHistory(InputStream in) throws IOException {
+  public ArrayList<HistoryModel> readHistory(InputStream in) throws IOException {
 
     JsonReader historyJson = new JsonReader(new InputStreamReader(in, "UTF-8"));
 
@@ -168,7 +168,7 @@ public class Utils {
 
   }
 
-  public List<HistoryModel> readMessage(JsonReader reader) throws IOException {
+  public ArrayList<HistoryModel> readMessage(JsonReader reader) throws IOException {
 
     List messages = new ArrayList();
 
@@ -219,6 +219,7 @@ public class Utils {
                 String resultArraynames = reader.nextName();
                 if(resultArraynames.equals("Symbol")){
                   historyDataObj.setSymbol(reader.nextString());
+                  Log.d("Symbol" ,historyDataObj.getSymbol() );
                 }
                 else if(resultArraynames.equals("Date")) {
                   historyDataObj.setDate(reader.nextString());

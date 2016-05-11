@@ -137,20 +137,24 @@ public class DetailActivity extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
-
+        mDataFilter = new IntentFilter("android.intent.action.MAIN");
+        dataList = new ArrayList<HistoryModel>();
 
         mDataBrdCast = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                 dataList = intent.getParcelableArrayListExtra("historydata");
 
-
+                dataList = intent.getParcelableArrayListExtra("historydata");
 
             }
         };
         this.registerReceiver(mDataBrdCast,mDataFilter);
 
+
+
         //String symbolName  = bundle.getString("value of symbol");
+
+        Log.d("value of arraylist" , String.valueOf(dataList.size()));
 
         String[] dates = new String[dataList.size()];
         float[] valueshigh = new float[dataList.size()];
@@ -165,7 +169,7 @@ public class DetailActivity extends Activity {
 
 
 
-        mDataFilter = new IntentFilter("android.intent.action.MAIN");
+
 
         LineSet lineData = new LineSet(dates,valueshigh);
         lineData.setColor(Color.parseColor("#ffffff")).setSmooth(true).setThickness(4).beginAt(0);
