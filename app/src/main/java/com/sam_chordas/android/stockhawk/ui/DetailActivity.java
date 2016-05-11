@@ -1,7 +1,10 @@
 package com.sam_chordas.android.stockhawk.ui;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,8 +16,11 @@ import com.google.android.gms.gcm.GcmNetworkManager;
 import com.google.android.gms.gcm.PeriodicTask;
 import com.google.android.gms.gcm.Task;
 import com.sam_chordas.android.stockhawk.R;
+import com.sam_chordas.android.stockhawk.data.HistoryModel;
 import com.sam_chordas.android.stockhawk.service.HistoryIntentService;
 import com.sam_chordas.android.stockhawk.service.HistoryTaskService;
+
+import java.util.ArrayList;
 
 
 public class DetailActivity extends Activity {
@@ -23,11 +29,16 @@ public class DetailActivity extends Activity {
     private Intent mHistoryIntent;
     private Bundle bundle;
     private StringBuilder msymbolname;
+    private BroadcastReceiver mDataBrdCast;
+    IntentFilter mDataFilter;
+    ArrayList<HistoryModel> dataList;
     public final static String LOG_TAG = DetailActivity.class.getSimpleName();
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_line_graph);
         lineChart  = (LineChartView) findViewById(R.id.linechart);
@@ -119,23 +130,48 @@ public class DetailActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
+        this.unregisterReceiver(mDataBrdCast);
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        String[]  months = {"Jan" , "Feb" , "March" , "April"};
-        float[] values = {10 , 20, 30 , 40 };
 
 
-        LineSet lineData = new LineSet(months,values);
+        mDataBrdCast = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                 dataList = intent.getParcelableArrayListExtra("historydata");
+
+
+
+            }
+        };
+        this.registerReceiver(mDataBrdCast,mDataFilter);
+
+        //String symbolName  = bundle.getString("value of symbol");
+
+        String[] dates = new String[dataList.size()];
+        float[] valueshigh = new float[dataList.size()];
+        float[] valueslow = new float[dataList.size()];
+        for(int i = 0 ; i<=dataList.size() ; i++){
+            dates[i] = dataList.get(i).getDate();
+            valueshigh[i] = (float)dataList.get(i).getHigh();
+            valueslow[i] = (float)dataList.get(i).getLow();
+
+        }
+        //   String[]  dates = {"Jan" , "Feb" , "March" , "April"};
+
+
+
+        mDataFilter = new IntentFilter("android.intent.action.MAIN");
+
+        LineSet lineData = new LineSet(dates,valueshigh);
         lineData.setColor(Color.parseColor("#ffffff")).setSmooth(true).setThickness(4).beginAt(0);
 
         lineChart.addData(lineData);
         lineChart.show();
-
-
-        //String symbolName  = bundle.getString("value of symbol");
 
         Toast.makeText(getApplicationContext(),msymbolname,Toast.LENGTH_SHORT).show();
 
