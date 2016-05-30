@@ -8,7 +8,6 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.db.chart.model.LineSet;
 import com.db.chart.view.LineChartView;
@@ -25,52 +24,60 @@ import java.util.ArrayList;
 
 public class DetailActivity extends Activity {
 
-    LineChartView lineChart;
+    LineChartView linecharthigh;
+    LineChartView linechartlow;
     private Intent mHistoryIntent;
     private Bundle bundle;
     private StringBuilder msymbolname;
     private BroadcastReceiver mDataBrdCast;
     IntentFilter mDataFilter;
     ArrayList<HistoryModel> dataList;
+    ArrayList<Integer> mmaxhigh;
+    ArrayList<Integer> mmaxlow;
+    int mlargest , mlowest;
+    int mbounds[] = new int[2];
+    float[] valueshigh;
+    float[] valueslow ;
+
     public final static String LOG_TAG = DetailActivity.class.getSimpleName();
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_line_graph);
-        lineChart  = (LineChartView) findViewById(R.id.linechart);
+        linecharthigh  = (LineChartView) findViewById(R.id.linecharthigh);
+        linechartlow = (LineChartView) findViewById(R.id.linechartlow);
         mHistoryIntent = new Intent(DetailActivity.this, HistoryIntentService.class);
-        bundle = getIntent().getExtras();
-        msymbolname = new StringBuilder(bundle.getString("value of symbol"));
-        mHistoryIntent.putExtra("symboltag" ,msymbolname.toString() );
-        Log.e(LOG_TAG , msymbolname.toString());
-        //startService(mHistoryIntent);
-
-      //  if(savedInstanceState==null){
-           // mHistoryIntent.putExtra("tag" , "start");
-
-            startService(mHistoryIntent);
+        //if(savedInstanceState!=null) {
 
        // }
-        long period = 3600L;
-        long flex = 10L;
-        String periodicTag = "periodic";
 
-        PeriodicTask task = new PeriodicTask.Builder()
-                .setService(HistoryTaskService.class)
-                .setPeriod(period)
-                .setFlex(flex)
-                .setTag(periodicTag)
-                .setRequiredNetwork(Task.NETWORK_STATE_CONNECTED)
-                .setRequiresCharging(false)
-                .build();
+        //else {
+            bundle = getIntent().getExtras();
+            msymbolname = new StringBuilder(bundle.getString("value of symbol"));
+            mHistoryIntent.putExtra("symboltag", msymbolname.toString());
+            Log.e(LOG_TAG, msymbolname.toString());
+            startService(mHistoryIntent);
 
-        GcmNetworkManager.getInstance(this).schedule(task);
+            long period = 3600L;
+            long flex = 10L;
+            String periodicTag = "periodic";
 
-    }
+            PeriodicTask task = new PeriodicTask.Builder()
+                    .setService(HistoryTaskService.class)
+                    .setPeriod(period)
+                    .setFlex(flex)
+                    .setTag(periodicTag)
+                    .setRequiredNetwork(Task.NETWORK_STATE_CONNECTED)
+                    .setRequiresCharging(false)
+                    .build();
+
+            GcmNetworkManager.getInstance(this).schedule(task);
+        }
+   // }
 
 
     /**
@@ -137,48 +144,103 @@ public class DetailActivity extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
-        mDataFilter = new IntentFilter("android.intent.action.MAIN");
+        mDataFilter = new IntentFilter("android.intent.action.DetailActivity");
         dataList = new ArrayList<HistoryModel>();
-
+        mmaxhigh = new ArrayList<Integer>();
+        mmaxlow = new ArrayList<Integer>();
         mDataBrdCast = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
 
                 dataList = intent.getParcelableArrayListExtra("historydata");
+                Log.d("value of arraylist", String.valueOf(dataList.size()));
 
+                int size = dataList.size();
+                if (size != 0) {
+                    String[] dates = new String[size];
+                   valueshigh = new float[size];
+                    valueslow = new float[size];
+                    int lowMin, lowMax, highMin, highMax;
+
+                    for (int i = 0; i < size; i++) {
+                        dates[i] = dataList.get(i).getDate();
+                        mmaxhigh.add((int)dataList.get(i).getHigh());
+                        mmaxhigh.add((int)dataList.get(i).getLow());
+
+                        valueshigh[i] = (float) dataList.get(i).getHigh();
+                        valueslow[i] = (float) dataList.get(i).getLow();
+
+                    }
+                    maxValue(mmaxhigh);
+
+                    lowMin = (int) valueslow[0];
+                    Log.d("value of " , String.valueOf(lowMin));
+                    lowMax = (int)valueslow[(valueslow.length)-1];
+                    Log.d("value of " , String.valueOf(lowMax));
+
+
+
+                    //setting the graph(line chart) bounds (highest and lowest value)
+                    int[] graphBounds = new int[2];
+                    graphBounds = maxValue(mmaxhigh);
+
+
+                    linecharthigh.setAxisBorderValues(graphBounds[1],graphBounds[0],1);
+
+                    linechartlow.setAxisBorderValues(graphBounds[1],graphBounds[0],1);
+
+                    //setting data set for line chart of hig values
+                    LineSet highData = new LineSet(dates, valueshigh);
+
+                    //setting data set for line chart of low values
+                    LineSet lowData = new LineSet(dates, valueslow);
+
+
+                    highData.setColor(Color.parseColor("#00FF00")).setSmooth(false).setThickness(8).getBegin();
+                    lowData.setColor(Color.parseColor("#FF0000")).setSmooth(false).setThickness(8).getBegin();
+
+
+                    linecharthigh.addData(highData);
+
+                    linechartlow.addData(lowData);
+
+
+                    linecharthigh.show();
+                    linechartlow.show();
+                }
             }
-        };
-        this.registerReceiver(mDataBrdCast,mDataFilter);
-
-
-
-        //String symbolName  = bundle.getString("value of symbol");
-
-        Log.d("value of arraylist" , String.valueOf(dataList.size()));
-
-        String[] dates = new String[dataList.size()];
-        float[] valueshigh = new float[dataList.size()];
-        float[] valueslow = new float[dataList.size()];
-        for(int i = 0 ; i<=dataList.size() ; i++){
-            dates[i] = dataList.get(i).getDate();
-            valueshigh[i] = (float)dataList.get(i).getHigh();
-            valueslow[i] = (float)dataList.get(i).getLow();
+            };
+            this.registerReceiver(mDataBrdCast, mDataFilter);
 
         }
-        //   String[]  dates = {"Jan" , "Feb" , "March" , "April"};
+
+    //This method is to find the high and low bound of the graph
+    protected int[] maxValue(ArrayList<Integer> hlw){
 
 
+        int forhigh = hlw.get(0);
+        int forlow = hlw.get(0);
+        for(int i = 1 ; i < hlw.size() ; i++){
 
+            if(hlw.get(i) > forhigh){
 
+                forhigh= hlw.get(i);
+                mlargest = forhigh;
+                mbounds[0]=forhigh;
 
-        LineSet lineData = new LineSet(dates,valueshigh);
-        lineData.setColor(Color.parseColor("#ffffff")).setSmooth(true).setThickness(4).beginAt(0);
+            }
+            else if(hlw.get(i)<forlow){
+                forlow = hlw.get(i);
+                mlowest = forlow;
+                mbounds[1] = mlowest;
+            }
 
-        lineChart.addData(lineData);
-        lineChart.show();
+        }
+       // Log.d("value of largest is " , String.valueOf(mbounds[0]));
+       // Log.d("value of lowest is " , String.valueOf(mbounds[1]));
 
-        Toast.makeText(getApplicationContext(),msymbolname,Toast.LENGTH_SHORT).show();
-
-
+      //  Log.d("Val;ue of lowest is " , String.valueOf(mlowest));
+        return mbounds;
     }
-}
+    }
+

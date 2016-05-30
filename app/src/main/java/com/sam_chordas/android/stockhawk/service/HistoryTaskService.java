@@ -115,7 +115,7 @@ public class HistoryTaskService extends GcmTaskService {
                     Log.e(LOG_CAT, inString);
                     dataPoints = utility.readHistory(fetchData((urlString)));
 
-                        Intent dataIntent = new Intent("android.intent.action.MAIN");//"android.intent.action.MAIN");
+                        Intent dataIntent = new Intent("android.intent.action.DetailActivity");//"android.intent.action.MAIN");
 
                         if(dataIntent!=null)
                             dataIntent.putParcelableArrayListExtra("historydata" , dataPoints);

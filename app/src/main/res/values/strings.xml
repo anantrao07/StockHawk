@@ -105,4 +105,6 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="title_activity_detail">Graph Pattern</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 </resources>

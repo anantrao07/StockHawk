@@ -36,7 +36,7 @@ public class Utils {
   public static boolean status = true;
   public static boolean historyStatus = true;
   public ArrayList<HistoryModel> hm = new ArrayList<>();
-  public HistoryModel historyDataObj = new HistoryModel();
+  public HistoryModel historyDataObj ;
 
   private int resultCount;
 
@@ -180,7 +180,7 @@ public class Utils {
     reader.beginObject();
 
     String first = reader.nextName();
-    Log.e("value of readernextname" , first);
+   // Log.e("value of readernextname" , first);
     reader.beginObject();
 
     while (reader.hasNext() != false && reader.peek()!= JsonToken.END_DOCUMENT) {
@@ -191,11 +191,11 @@ public class Utils {
       if(jtk==JsonToken.NAME){
         String name = reader.nextName();
 
-        Log.e("value of next reader" , name);
+      //  Log.e("value of next reader" , name);
 
         if(name.equals("count")) {
           resultCount = reader.nextInt();
-          Log.e("value of count is ", String.valueOf(resultCount));
+         // Log.e("value of count is ", String.valueOf(resultCount));
 
         }
 
@@ -205,21 +205,22 @@ public class Utils {
 
             reader.beginObject();
             String arrayTokenNAme = reader.nextName();
-            Log.d("value of value of token" , arrayTokenNAme);
+           // Log.d("value of value of token" , arrayTokenNAme);
             reader.beginArray();
             while ((reader.hasNext() != false)){
 
               //JsonToken resultToken = reader.peek();
               //reader.beginObject();
-              Log.e("value of token " , jtk.toString());
-
+             // Log.e("value of token " , jtk.toString());
+              historyDataObj = new HistoryModel();
               reader.beginObject();
-              while (reader.hasNext()){
+              while (reader.hasNext() && reader.peek()!= JsonToken.END_DOCUMENT){
+
 
                 String resultArraynames = reader.nextName();
                 if(resultArraynames.equals("Symbol")){
                   historyDataObj.setSymbol(reader.nextString());
-                  Log.d("Symbol" ,historyDataObj.getSymbol() );
+                //  Log.d("Symbol" ,historyDataObj.getSymbol() );
                 }
                 else if(resultArraynames.equals("Date")) {
                   historyDataObj.setDate(reader.nextString());
@@ -234,12 +235,15 @@ public class Utils {
                   reader.skipValue();
                 }
 
-                Log.d(LOG_TAG, resultArraynames);
+                //Log.d(LOG_TAG, resultArraynames);
                 hm.add(historyDataObj);
 
               }
+              reader.endObject();
 
             }
+
+            reader.endArray();
           }
       }
 
