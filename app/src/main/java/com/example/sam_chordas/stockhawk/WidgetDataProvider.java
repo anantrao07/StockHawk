@@ -1,10 +1,17 @@
 package com.example.sam_chordas.stockhawk;
 
+import android.annotation.TargetApi;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.os.Build;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
+
+import com.sam_chordas.android.stockhawk.R;
+import com.sam_chordas.android.stockhawk.data.QuoteColumns;
+import com.sam_chordas.android.stockhawk.data.QuoteProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,28 +24,36 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
 
     List<String> demo = new ArrayList<String>();
     Intent intent ;
-    Context context;
+    Context mcontext;
+    Cursor mCursor;
 
 
     public WidgetDataProvider(Intent intent, Context context) {
         this.intent = intent;
-        this.context = context;
+        this.mcontext = context;
     }
 
     public void init(){
-        for(int i = 0 ; i<=10 ; i++){
-            demo.add("value of i is "+ i);
 
-        }
+
+
+
     }
     /**
      * Called when your factory is first constructed. The same factory may be shared across
      * multiple RemoteViewAdapters depending on the intent passed.
      */
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onCreate() {
-
-        init();
+        mCursor = mcontext.getContentResolver().query(QuoteProvider.Quotes.CONTENT_URI,//table
+                new String[] {"_id" , "symbol","percent_change"},//columns
+                null,//selection where clause
+                null,//
+                null,
+                null
+        );
+       // init();
     }
 
     /**
@@ -88,7 +103,21 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
      */
     @Override
     public RemoteViews getViewAt(int position) {
-        return null;
+       RemoteViews remoteViews = new RemoteViews(mcontext.getPackageName(), R.layout.list_item_view);
+       mCursor.moveToPosition(position);
+
+        int symbol_idx = mCursor.getColumnIndex(QuoteColumns.SYMBOL);
+
+        int change_idx = mCursor.getColumnIndex(QuoteColumns.PERCENT_CHANGE);
+
+
+        remoteViews.setTextViewText(R.id.symbolview,mCursor.getString(symbol_idx));
+        remoteViews.setTextViewText(R.id.changeview,mCursor.getString(change_idx));
+
+
+
+
+        return remoteViews;
     }
 
     /**

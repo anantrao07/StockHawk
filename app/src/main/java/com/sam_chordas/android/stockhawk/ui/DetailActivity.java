@@ -152,6 +152,7 @@ public class DetailActivity extends Activity {
             @Override
             public void onReceive(Context context, Intent intent) {
 
+                
                 dataList = intent.getParcelableArrayListExtra("historydata");
                 Log.d("value of arraylist", String.valueOf(dataList.size()));
 
@@ -171,7 +172,7 @@ public class DetailActivity extends Activity {
                         valueslow[i] = (float) dataList.get(i).getLow();
 
                     }
-                    maxValue(mmaxhigh);
+
 
                     lowMin = (int) valueslow[0];
                     Log.d("value of " , String.valueOf(lowMin));

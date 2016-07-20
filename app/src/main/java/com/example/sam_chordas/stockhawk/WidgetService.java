@@ -17,6 +17,6 @@ public class WidgetService extends RemoteViewsService {
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
 
         //return remote view facory here
-        return null;
+        return new WidgetDataProvider(intent , this);
     }
 }
