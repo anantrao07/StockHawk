@@ -1,29 +1,31 @@
 <resources>
     <string name="app_name">Stock Hawk</string>
 
-    <string name="action_example">Example action</string>
+    <string name="action_example" translatable="false">Example action </string>
 
-    <string name="action_settings">Settings</string>
-    <string name="action_change_units">Change Units</string>
-    <string name="symbol_search">Symbol Search</string>
-    <string name="content_test">Search for a Stock Symbol</string>
-    <string name="input_hint">FB</string>
-    <string name="input_prefill"></string>
-    <string name="network_toast">Uh-oh! This app requires an internet connection</string>
-    <string name="no_text">Please enter an IPO name </string>
-    <string name="wrong_name">Oops!! The IPO name entered is incorrect</string>
-    <string name="title_activity_scrolling">ScrollingActivity</string>
+    <string name="action_settings" translatable="false">Settings
 
-    <string name="add_stock">Press it to add new IPO you want to the list</string>
-    <string name="bid_price">shows the bid price</string>
-    <string name="show_change">shows the Dollar change when Dollar sign  is clicked else shows the percent change</string>
-    <string name="empty_string">Theres a problem fetching data</string>
-    <string name="ipo_invalid">IPO name not found</string>
-    <string name="large_text">
+    </string>
+    <string name="action_change_units" translatable="false">Change Units</string>
+    <string name="symbol_search" translatable="false">Symbol Search</string>
+    <string name="content_test" translatable="false">Search for a Stock Symbol</string>
+    <string name="input_hint" translatable="false">FB</string>
+    <string name="input_prefill" translatable="false"></string>
+    <string name="network_toast" translatable="false">Uh-oh! This app requires an internet connection</string>
+    <string name="no_text" translatable="false">Please enter an IPO name </string>
+    <string name="wrong_name" translatable="false">Oops!! The IPO name entered is incorrect</string>
+    <string name="title_activity_scrolling" translatable="false">ScrollingActivity</string>
+
+    <string name="add_stock" translatable="false">Press it to add new IPO you want to the list</string>
+    <string name="bid_price" translatable="false">shows the bid price</string>
+    <string name="show_change" translatable="false">shows the Dollar change when Dollar sign  is clicked else shows the percent change</string>
+    <string name="empty_string" translatable="false">Theres a problem fetching data</string>
+    <string name="ipo_invalid" translatable="false">IPO name not found</string>
+    <string name="large_text" translatable="false">
 
         "Material is the metaphor."
     </string>
-    <string name="title_activity_detail">Graph Pattern</string>
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="add_widget">Add widget</string>
+    <string name="title_activity_detail" translatable="false">Graph Pattern</string>
+    <string name="appwidget_text" translatable="false">EXAMPLE</string>
+    <string name="add_widget" translatable="false">Add widget</string>
 </resources>
