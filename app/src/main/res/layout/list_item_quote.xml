@@ -28,6 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingRight="10sp"
+        android:paddingEnd="3dp"
         android:contentDescription="@string/bid_price"
         tools:text="1000.00"
 
@@ -39,7 +40,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="3dp"
+        android:paddingStart="3dp"
         android:paddingRight="3dp"
+        android:paddingEnd="3dp"
         android:contentDescription="@string/show_change"
         tools:text="100%"
         />
