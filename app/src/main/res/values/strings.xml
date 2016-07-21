@@ -21,6 +21,7 @@
     <string name="show_change" translatable="false">shows the Dollar change when Dollar sign  is clicked else shows the percent change</string>
     <string name="empty_string" translatable="false">Theres a problem fetching data</string>
     <string name="ipo_invalid" translatable="false">IPO name not found</string>
+    <string name="stock_saved" translatable="false">The stock is already saved</string>
     <string name="large_text" translatable="false">
 
         "Material is the metaphor."
