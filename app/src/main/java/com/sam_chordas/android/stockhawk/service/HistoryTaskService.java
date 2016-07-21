@@ -128,7 +128,7 @@ public class HistoryTaskService extends GcmTaskService {
 
             }
 
-           // result = GcmNetworkManager.RESULT_SUCCESS;
+           result = GcmNetworkManager.RESULT_SUCCESS;
         }
 
 

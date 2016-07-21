@@ -20,6 +20,7 @@ import com.sam_chordas.android.stockhawk.service.HistoryIntentService;
 import com.sam_chordas.android.stockhawk.service.HistoryTaskService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class DetailActivity extends Activity {
@@ -221,7 +222,7 @@ public class DetailActivity extends Activity {
 
         int forhigh = hlw.get(0);
         int forlow = hlw.get(0);
-        for(int i = 1 ; i < hlw.size() ; i++){
+        /*for(int i = 0 ; i < hlw.size() ; i++){
 
             if(hlw.get(i) > forhigh){
 
@@ -236,7 +237,11 @@ public class DetailActivity extends Activity {
                 mbounds[1] = mlowest;
             }
 
-        }
+
+        }*/
+        mbounds[0] = Collections.max(hlw);
+        mbounds[1] = Collections.min(hlw);
+
        // Log.d("value of largest is " , String.valueOf(mbounds[0]));
        // Log.d("value of lowest is " , String.valueOf(mbounds[1]));
 
