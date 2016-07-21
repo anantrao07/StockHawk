@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -68,7 +69,7 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
     @Override
     public void onDataSetChanged() {
 
-        init();
+      //  init();
     }
 
     /**
@@ -87,7 +88,9 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
      */
     @Override
     public int getCount() {
-        return demo.size();
+        int count = mCursor.getCount();
+        Log.d("value of count",String.valueOf(count));
+        return count;
 
     }
 
@@ -113,9 +116,6 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
 
         remoteViews.setTextViewText(R.id.symbolview,mCursor.getString(symbol_idx));
         remoteViews.setTextViewText(R.id.changeview,mCursor.getString(change_idx));
-
-
-
 
         return remoteViews;
     }

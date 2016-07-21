@@ -20,8 +20,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
-
 /**
  * Created by sam_chordas on 10/8/15.
  */
@@ -64,6 +64,10 @@ public class Utils {
 
 
           if (resultsArray != null && resultsArray.length() != 0) {
+
+
+
+
             for (int i = 0; i < resultsArray.length(); i++) {
               jsonObject = resultsArray.getJSONObject(i);
               batchOperations.add(buildBatchOperation(jsonObject));
@@ -74,6 +78,7 @@ public class Utils {
     } catch (JSONException e) {
       Log.e(LOG_TAG, "String to JSON failed: " + e);
     }
+
     return batchOperations;
   }
 
@@ -86,6 +91,18 @@ public class Utils {
     return bidPrice;
 
   }
+
+
+  //method to return current time stamp
+  public static  String dateStamp(){
+    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy-hh-mm-ss");
+    String  format = sdf.format(new Date());
+    Log.d("date is",format);
+
+    return format;
+
+  }
+
 
   public static String truncateChange(String change, boolean isPercentChange) {
     String weight = change.substring(0, 1);
@@ -111,6 +128,8 @@ public class Utils {
       String bid = jsonObject.getString("Bid");
       String change = jsonObject.getString("Change");
       Log.e("value of bid price is", change);
+      String currentTime = dateStamp();
+
       if (!(bid.equals("null"))) {
 
         builder.withValue(QuoteColumns.SYMBOL, jsonObject.getString("symbol").toUpperCase());
@@ -119,6 +138,9 @@ public class Utils {
                 jsonObject.getString("ChangeinPercent"), true));
         builder.withValue(QuoteColumns.CHANGE, truncateChange(change, false));
         builder.withValue(QuoteColumns.ISCURRENT, 1);
+        builder.withValue(QuoteColumns.TIMESTAMP,currentTime);
+
+
 
       }
       if (change.charAt(0) == '-') {
