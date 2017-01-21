@@ -150,7 +150,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                                     if (c.getCount() != 0) {
 
                                         Toast toast =
-                                                Toast.makeText(MyStocksActivity.this, "@strings/stock_saved",
+                                                Toast.makeText(MyStocksActivity.this, getString(R.string.stock_saved),
                                                         Toast.LENGTH_LONG);
                                         toast.setGravity(Gravity.CENTER, Gravity.CENTER, 0);
                                         toast.show();
@@ -221,7 +221,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
 
                 boolean isstatus = intent.getBooleanExtra("symbolstatus", true);
                 if(isstatus==false){
-                    Toast.makeText(getApplicationContext(),"@strings/ipo_invalid" , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),getString(R.string.ipo_invalid) , Toast.LENGTH_SHORT).show();
                     Utils.status = true;
 
                 }

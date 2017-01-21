@@ -84,11 +84,11 @@ public class HistoryTaskService extends GcmTaskService {
                 Log.e("getenddate",Utils.getEndDate());
 
                 Log.d(LOG_CAT, symbolName);
-                historyUrl.append("@strings/history_url");
-                historyUrl.append(URLEncoder.encode("@strings/history_data","UTF-8"));
-                     //   + " in ( \'" + symbolName + " \') and startDate= \' 2016-01-01 \' and endDate=\' 2016-03-10 \' ", "UTF-8"));
+                historyUrl.append("https://query.yahooapis.com/v1/public/yql?q=");
+                historyUrl.append(URLEncoder.encode("select * from yahoo.finance.historicaldata where symbol=","UTF-8"));
+                     //   + " in ( \'" + symbolName + " \') and startDate= \' 2016-10-01 \' and endDate=\' 2016-03-10 \' ", "UTF-8"));
                 historyUrl.append(URLEncoder.encode("\'"+symbolName+"\'"+" and startDate=\'"+mstartDate+"\' and endDate=\'"+mendDate+"\'", "UTF-8"));
-                historyUrl.append("@string/history_url_end");
+                historyUrl.append("&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=");
 
 
             } catch (UnsupportedEncodingException e) {
